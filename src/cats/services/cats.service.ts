@@ -18,7 +18,8 @@ export class CatsService {
       cat.id,
       fileName,
     );
-    console.log(newCat);
+    console.log(newCat); //
+
     return newCat;
   }
   async signUp(body: CatRequestDto) {
