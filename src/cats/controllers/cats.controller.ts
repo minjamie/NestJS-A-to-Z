@@ -81,4 +81,11 @@ export class CatsController {
   ) {
     return this.catsService.uploads(cat, files);
   }
+
+  @ApiOperation({ summary: '모든 고양이 가져오기' })
+  @Get('all')
+  @UseGuards(JwtAuthGuard)
+  getAllCat() {
+    return this.catsService.getAllCat();
+  }
 }

@@ -1,3 +1,4 @@
+import { ObjectID } from 'bson';
 import { ApiProperty } from '@nestjs/swagger';
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
@@ -18,7 +19,6 @@ export class Cat extends Document {
     required: true,
     unique: true,
   })
-  @IsEmail()
   @IsNotEmpty()
   @IsString()
   @IsNotEmpty()

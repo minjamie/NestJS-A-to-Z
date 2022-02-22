@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { CommentsModule } from './comments/comments.module';
 /* 캡슐화 (encapsulation)
 객체(object)의 속성과 행위(method)를 하나로 묶고, 구현된 일부를 감추어 은닉한다.(은닉 hiding)
 exports 하지않은 공급자는 사용하지 못한다.*/
@@ -20,6 +21,7 @@ exports 하지않은 공급자는 사용하지 못한다.*/
     }),
     CatsModule,
     AuthModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

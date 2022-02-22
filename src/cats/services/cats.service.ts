@@ -10,16 +10,17 @@ AOP(관점지향 프로그래밍-모듈성 증가) 기술에서 영감``을 받�
 @Injectable()
 export class CatsService {
   constructor(private readonly catsRepository: CatsRepository) {}
-
+  async getAllCat() {
+    const allCat = await this.catsRepository.findAll();
+    const readdOnlyCats = allCat.map((cat) => cat.readOnlyData);
+    return readdOnlyCats;
+  }
   async uploads(cat: Cat, files: Express.Multer.File[]) {
     const fileName = `cats/${files[0].filename}`;
-    console.log(fileName);
     const newCat = await this.catsRepository.findByIdAndUpdateImg(
       cat.id,
       fileName,
     );
-    console.log(newCat); //
-
     return newCat;
   }
   async signUp(body: CatRequestDto) {

@@ -18,6 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
   async validate(payload: Payload) {
     const cat = await this.catsRepository.findCatByIdWithOutPsw(payload.sub);
+
     if (cat) {
       return cat; // request.user에 cat이 들어간다.
     } else {

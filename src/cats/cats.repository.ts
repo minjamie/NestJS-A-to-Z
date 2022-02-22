@@ -2,19 +2,26 @@ import { CatRequestDto } from './dto/cat.request.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable, HttpException } from '@nestjs/common';
 import { Cat } from './cats.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 @Injectable()
 export class CatsRepository {
   constructor(@InjectModel(Cat.name) private readonly catModel: Model<Cat>) {}
+
+  async findAll() {
+    return await this.catModel.find();
+  }
+
   async findByIdAndUpdateImg(id: string, fileName: string) {
     const cat = await this.catModel.findById(id);
     cat.imgUrl = `http://localhost:8000/media/${fileName}`;
-    const newCat = await  cat.save();
+    const newCat = await cat.save();
     console.log(newCat);
     return newCat.readOnlyData;
   }
-  async findCatByIdWithOutPsw(catId: string): Promise<Cat | null> {
+  async findCatByIdWithOutPsw(
+    catId: string | Types.ObjectId,
+  ): Promise<Cat | null> {
     const cat = await this.catModel.findById(catId).select('-password');
     return cat;
   }
