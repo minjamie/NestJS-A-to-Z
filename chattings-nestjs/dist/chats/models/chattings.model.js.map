@@ -1,0 +1,1 @@
+{"version":3,"file":"chattings.model.js","sourceRoot":"","sources":["../../../src/chats/models/chattings.model.ts"],"names":[],"mappings":";;;;;;;;;AAAA,+CAA8E;AAC9E,uCAAoC;AAEpC,MAAM,OAAO,GAAkB;IAC7B,UAAU,EAAE,WAAW;IACvB,UAAU,EAAE,IAAI;CACjB,CAAC;AAGF,IAAa,QAAQ,GAArB,MAAa,QAAS,SAAQ,mBAAQ;CAAG,CAAA;AAA5B,QAAQ;IADpB,IAAA,iBAAM,EAAC,OAAO,CAAC;GACH,QAAQ,CAAoB;AAA5B,4BAAQ"}
