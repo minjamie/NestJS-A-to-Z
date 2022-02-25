@@ -13,36 +13,68 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChatsGateway = void 0;
+const socket_model_1 = require("./chats/models/socket.model");
+const chattings_model_1 = require("./chats/models/chattings.model");
+const mongoose_1 = require("@nestjs/mongoose");
 const common_1 = require("@nestjs/common");
 const socket_io_1 = require("socket.io");
 const websockets_1 = require("@nestjs/websockets");
+const mongoose_2 = require("mongoose");
 let ChatsGateway = class ChatsGateway {
-    constructor() {
+    constructor(chattingModel, socketModel) {
+        this.chattingModel = chattingModel;
+        this.socketModel = socketModel;
         this.logger = new common_1.Logger('Chat');
         this.logger.log('constructor');
     }
     afterInit() {
         this.logger.log('init');
     }
-    handleDisconnect(socket) {
+    async handleDisconnect(socket) {
+        const user = await this.socketModel.findOne({
+            id: socket.id,
+        });
+        if (user) {
+            socket.broadcast.emit('disconnect_user', user.username);
+            await user.delete();
+        }
         this.logger.log(`disconnected: ${socket.id} ${socket.nsp.name}`);
     }
     handleConnection(socket) {
         this.logger.log(`connected: ${socket.id} ${socket.nsp.name}`);
     }
-    handleNewUser(username, socket) {
+    async handleNewUser(username, socket) {
+        const exist = await this.socketModel.exists({ username });
+        if (exist) {
+            username = `${username}_${Math.floor(Math.random() * 100)}`;
+            await this.socketModel.create({
+                id: socket.id,
+                username,
+            });
+        }
+        else {
+            await this.socketModel.create({
+                id: socket.id,
+                username,
+            });
+        }
         socket.broadcast.emit('user_connected', username);
         return username;
     }
-    handleSubmitChat(chat, socket) {
-        socket.broadcast.emit('new_chat', { chat, username: socket.id });
+    async handleSubmitChat(chat, socket) {
+        const socketObj = await this.socketModel.findOne({ id: socket.id });
+        await this.chattingModel.create({
+            user: socketObj,
+            chat: chat,
+        });
+        socket.broadcast.emit('new_chat', { chat, username: socketObj.username });
     }
 };
 __decorate([
     __param(0, (0, websockets_1.ConnectedSocket)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], ChatsGateway.prototype, "handleDisconnect", null);
 __decorate([
     __param(0, (0, websockets_1.ConnectedSocket)()),
@@ -56,7 +88,7 @@ __decorate([
     __param(1, (0, websockets_1.ConnectedSocket)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, socket_io_1.Socket]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], ChatsGateway.prototype, "handleNewUser", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('submit_chat'),
@@ -64,11 +96,14 @@ __decorate([
     __param(1, (0, websockets_1.ConnectedSocket)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, socket_io_1.Socket]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], ChatsGateway.prototype, "handleSubmitChat", null);
 ChatsGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ namespace: 'chattings' }),
-    __metadata("design:paramtypes", [])
+    __param(0, (0, mongoose_1.InjectModel)(chattings_model_1.Chatting.name)),
+    __param(1, (0, mongoose_1.InjectModel)(socket_model_1.Socket.name)),
+    __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model])
 ], ChatsGateway);
 exports.ChatsGateway = ChatsGateway;
 //# sourceMappingURL=chats.gateway.js.map

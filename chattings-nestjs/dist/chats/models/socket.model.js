@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Socket = void 0;
+exports.SocketSchema = exports.Socket = void 0;
 const class_validator_1 = require("class-validator");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
@@ -41,4 +41,5 @@ Socket = __decorate([
     (0, mongoose_1.Schema)(options)
 ], Socket);
 exports.Socket = Socket;
+exports.SocketSchema = mongoose_1.SchemaFactory.createForClass(Socket);
 //# sourceMappingURL=socket.model.js.map
