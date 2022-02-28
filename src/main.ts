@@ -6,6 +6,7 @@ import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import * as expressBasicAuth from 'express-basic-auth';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as path from 'path';
+import { Model, Types } from 'mongoose';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -30,6 +31,7 @@ async function bootstrap() {
     .setTitle('C.I.C')
     .setDescription('cat')
     .setVersion('1.0.0')
+    .addBearerAuth()
     .build();
 
   const document: OpenAPIObject = SwaggerModule.createDocument(app, config);

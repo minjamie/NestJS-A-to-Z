@@ -14,10 +14,12 @@ exports 하지않은 공급자는 사용하지 못한다.*/
 
 @Module({
   imports: [
-    ConfigModule.forRoot({}),
+    ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MONGODB_URL, {
       useNewUrlParser: true,
+      useFindAndModify: false,
       useUnifiedTopology: true,
+      useCreateIndex: true,
     }),
     CatsModule,
     AuthModule,

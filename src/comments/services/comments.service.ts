@@ -1,9 +1,10 @@
+import { ObjectID } from 'bson';
 import { CatsRepository } from 'src/cats/cats.repository';
 import { Comments } from './../comments.schema';
 import { CommentsCreateDto } from './../dto/comments.create.dto';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 @Injectable()
 export class CommentsService {
@@ -21,9 +22,9 @@ export class CommentsService {
     }
   }
 
-  async createComment(id: string, commentData: CommentsCreateDto) {
+  async createComment(_id: string, commentData: CommentsCreateDto) {
     try {
-      const targetCat = await this.catsRepository.findCatByIdWithOutPsw(id);
+      const targetCat = await this.catsRepository.findCatByIdWithOutPsw(_id);
 
       const { contents, author } = commentData;
       const validatedAuthor = await this.catsRepository.findCatByIdWithOutPsw(

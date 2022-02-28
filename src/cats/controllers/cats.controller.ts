@@ -19,7 +19,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBasicAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('cats')
@@ -38,10 +38,20 @@ export class CatsController {
   // (@Param('id', ParseIntPipe, PositiveIntPipe) param: number)
 
   @ApiOperation({ summary: '현재 고양이 가져오기' })
+  @ApiBasicAuth()
   @UseGuards(JwtAuthGuard)
   @Get()
   getCurrentCat(@CurrentUser() cat) {
+    console.log(cat);
     return cat;
+  }
+
+  @ApiOperation({ summary: '모든 고양이 가져오기' })
+  // @ApiBasicAuth()
+  // @UseGuards(JwtAuthGuard)
+  @Get('all')
+  getAllCat() {
+    return this.catsService.getAllCat();
   }
 
   @ApiResponse({
@@ -80,12 +90,5 @@ export class CatsController {
     @CurrentUser() cat: Cat,
   ) {
     return this.catsService.uploads(cat, files);
-  }
-
-  @ApiOperation({ summary: '모든 고양이 가져오기' })
-  @Get('all')
-  @UseGuards(JwtAuthGuard)
-  getAllCat() {
-    return this.catsService.getAllCat();
   }
 }

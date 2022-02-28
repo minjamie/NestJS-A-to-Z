@@ -25,10 +25,10 @@ export class CommentsController {
   @ApiOperation({ summary: '댓글쓰기' })
   @Post(':id')
   async cerateComments(
-    @Param('id') id: string,
+    @Param('id') _id: string,
     @Body() body: CommentsCreateDto,
   ) {
-    return this.commentsService.createComment(id, body);
+    return this.commentsService.createComment(_id, body);
   }
 
   @ApiOperation({ summary: '좋아요수 올리기' })
