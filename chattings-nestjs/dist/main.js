@@ -10,7 +10,7 @@ async function bootstrap() {
     app.setBaseViewsDir((0, path_1.join)(__dirname, '..', 'views'));
     app.setViewEngine('hbs');
     app.useGlobalPipes(new common_1.ValidationPipe());
-    await app.listen(8000);
+    await app.listen(8080);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map
